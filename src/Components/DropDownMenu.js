@@ -27,6 +27,12 @@ function DropDownMenu(props) {
                     .then(result => {
                         setList(result['gesmes:Envelope'].Cube[0].Cube[0].Cube)
                     })
+                    .catch(error => {
+                        console.log(`${error}: failed to parse xml response to JSON`)
+                    })
+            })
+            .catch(error => {
+                console.log(`${error}: failed currency api/xml response`)
             })
         return () => {
             // need to clean up
@@ -38,11 +44,9 @@ function DropDownMenu(props) {
     }
 
     const handleInputChange = (event) => {
-        console.log(event.target.value)
         setInput(event.target.value)
     }
 
-    console.log(list)
     return (
         <FormControl>
             <InputLabel>1 USD = 0.8110 EUR</InputLabel>
