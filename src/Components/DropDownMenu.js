@@ -9,7 +9,7 @@ import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 
 function DropDownMenu(props) {
-    const [currency, setCurrency] = useState('')
+    const [currency, setCurrency] = useState({currency: '', rate:''})
     const [input, setInput] = useState('currency')
     const [list, setList] = useState('')
 
@@ -25,7 +25,15 @@ function DropDownMenu(props) {
             .then(response => {
                 parser.parseStringPromise(response.data)
                     .then(result => {
-                        setList(result['gesmes:Envelope'].Cube[0].Cube[0].Cube)
+                        const dataArray = result['gesmes:Envelope'].Cube[0].Cube[0].Cube
+                        const sortedArray = dataArray.sort((a, b) => {
+                            const currencyA = a['$'].currency.toUpperCase()
+                            const currencyB = b['$'].currency.toUpperCase()
+                            if (currencyA < currencyB) return -1
+                            if (currencyA > currencyB) return 1
+                            return 0
+                        })
+                        setList(sortedArray)
                     })
                     .catch(error => {
                         console.log(`${error}: failed to parse xml response to JSON`)
@@ -39,24 +47,31 @@ function DropDownMenu(props) {
         }
     }, [])
 
+
+
     const handleChange = (event) => {
-        setCurrency(event.target.value)
+        setCurrency( 
+            {
+                currency: event.target.value.currency,
+                rate: event.target.value.rate
+            }
+        )
     }
 
     const handleInputChange = (event) => {
         setInput(event.target.value)
     }
-
+  
     return (
         <FormControl>
-            <InputLabel>1 USD = 0.8110 EUR</InputLabel>
+            <InputLabel>{currency.currency} = {currency.rate}</InputLabel>
             <Select
-                value={currency}
+                value={currency.currency}
                 onChange={handleChange}
             >
                 {list && list.map((currency) => {
                     return (
-                        <MenuItem value={10}>{currency['$'].currency}</MenuItem>
+                        <MenuItem key={currency['$'].currency} value={currency['$']}>{currency['$'].currency}</MenuItem>
                     )
 
                 })}
