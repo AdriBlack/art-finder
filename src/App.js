@@ -15,12 +15,10 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <body>
         <CurrencyContainer>
           <PageTitle>Currency Converter</PageTitle>
           <DropDownMenu />
         </CurrencyContainer>
-      </body>
     </>
   );
 }

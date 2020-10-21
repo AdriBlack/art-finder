@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 
 function DropDownMenu(props) {
     const [currency, setCurrency] = useState({currency: '', rate:''})
-    const [input, setInput] = useState('currency')
+    const [input, setInput] = useState(currency.rate)
     const [list, setList] = useState('')
 
 
@@ -45,9 +45,12 @@ function DropDownMenu(props) {
         return () => {
             // need to clean up
         }
-    }, [])
+    }, [parser])
 
 
+    useEffect(() => {
+        setInput(currency.rate)
+    },[currency])
 
     const handleChange = (event) => {
         setCurrency( 
@@ -63,8 +66,9 @@ function DropDownMenu(props) {
     }
   
     return (
+        <>
         <FormControl>
-            <InputLabel>{currency.currency} = {currency.rate}</InputLabel>
+            <InputLabel shrink={false}>{currency.currency} = {currency.rate}</InputLabel>
             <Select
                 value={currency.currency}
                 onChange={handleChange}
@@ -78,6 +82,7 @@ function DropDownMenu(props) {
             </Select>
             <TextField value={input} onChange={handleInputChange} />
         </FormControl>
+        </>
     )
 
 }
