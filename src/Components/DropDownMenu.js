@@ -45,7 +45,7 @@ function DropDownMenu(props) {
         return () => {
             // need to clean up
         }
-    }, [parser])
+    }, [])
 
 
     useEffect(() => {
